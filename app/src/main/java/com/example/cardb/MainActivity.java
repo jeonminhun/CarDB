@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
                         .append(c.year)
                         .append(")\n");
             }
+            // 깃 허브 확인용
 
             runOnUiThread(() -> carText.setText(builder.toString()));
         }).start();
