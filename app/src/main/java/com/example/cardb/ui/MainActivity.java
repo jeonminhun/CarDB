@@ -1,4 +1,4 @@
-package com.example.cardb;
+package com.example.cardb.ui;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -11,8 +11,9 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.room.Room;
 
-import com.example.cardb.DB.CarDatabase;
-import com.example.cardb.entity.Car;
+import com.example.cardb.R;
+import com.example.cardb.data.DB.CarDatabase;
+import com.example.cardb.data.entity.Car;
 
 import java.util.List;
 

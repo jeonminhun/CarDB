@@ -1,10 +1,10 @@
-package com.example.cardb.DAO;
+package com.example.cardb.data.DAO;
 
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 
-import com.example.cardb.entity.Car;
+import com.example.cardb.data.entity.Car;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.example.cardb.entity;
+package com.example.cardb.data.entity;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
