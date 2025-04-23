@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/previewImage1"
+            android:layout_width="185dp"
+            android:layout_height="120dp"
+            android:layout_marginRight="10dp"
+
+            android:background="#dddddd"
+            android:contentDescription="미리보기 이미지"
+            android:scaleType="centerCrop" />
+
+        <ImageView
+            android:id="@+id/previewImage2"
+            android:layout_width="185dp"
+            android:layout_height="120dp"
+            android:layout_marginRight="10dp"
+
+            android:background="#dddddd"
+            android:contentDescription="미리보기 이미지"
+            android:scaleType="centerCrop" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/previewImage3"
+            android:layout_width="185dp"
+            android:layout_height="120dp"
+            android:layout_marginRight="10dp"
+
+            android:background="#dddddd"
+            android:contentDescription="미리보기 이미지"
+            android:scaleType="centerCrop" />
+
+        <ImageView
+            android:id="@+id/previewImage4"
+            android:layout_width="185dp"
+            android:layout_height="120dp"
+            android:layout_marginRight="10dp"
+
+            android:background="#dddddd"
+            android:contentDescription="미리보기 이미지"
+            android:scaleType="centerCrop" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/previewImage5"
+            android:layout_width="185dp"
+            android:layout_height="120dp"
+            android:layout_marginRight="10dp"
+
+            android:background="#dddddd"
+            android:contentDescription="미리보기 이미지"
+            android:scaleType="centerCrop" />
+
+        <ImageView
+            android:id="@+id/previewImage6"
+            android:layout_width="185dp"
+            android:layout_height="120dp"
+            android:layout_marginRight="10dp"
+
+            android:background="#dddddd"
+            android:contentDescription="미리보기 이미지"
+            android:scaleType="centerCrop" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/previewImage7"
+            android:layout_width="185dp"
+            android:layout_height="120dp"
+            android:layout_marginRight="10dp"
+
+            android:background="#dddddd"
+            android:contentDescription="미리보기 이미지"
+            android:scaleType="centerCrop" />
+
+        <ImageView
+            android:id="@+id/previewImage8"
+            android:layout_width="185dp"
+            android:layout_height="120dp"
+            android:layout_marginRight="10dp"
+
+            android:background="#dddddd"
+            android:contentDescription="미리보기 이미지"
+            android:scaleType="centerCrop" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/previewImage9"
+            android:layout_width="185dp"
+            android:layout_height="120dp"
+            android:layout_marginRight="10dp"
+
+            android:background="#dddddd"
+            android:contentDescription="미리보기 이미지"
+            android:scaleType="centerCrop" />
+
+        <ImageView
+            android:id="@+id/previewImage10"
+            android:layout_width="185dp"
+            android:layout_height="120dp"
+            android:layout_marginRight="10dp"
+
+            android:background="#dddddd"
+            android:contentDescription="미리보기 이미지"
+            android:scaleType="centerCrop" />
+    </LinearLayout>
+</LinearLayout>

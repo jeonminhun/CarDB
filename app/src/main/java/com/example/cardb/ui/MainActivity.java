@@ -1,69 +1,132 @@
 package com.example.cardb.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
-import android.widget.TextView;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.widget.ImageView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-import androidx.room.Room;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.bumptech.glide.Glide;
 import com.example.cardb.R;
-import com.example.cardb.data.DB.CarDatabase;
+import com.example.cardb.data.adapter.CarAdapter;
 import com.example.cardb.data.entity.Car;
+import com.example.cardb.data.repository.CarRepository;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
+
+    private RecyclerView recyclerView;
+    private CarAdapter adapter;
+    private CarRepository repository;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+
+    private String editTextValue1 = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        CarDatabase db = Room.databaseBuilder(getApplicationContext(),
-                CarDatabase.class, "car-database").build();
-        new Thread(() -> {
-            Car car = new Car();
-            car.brand = "Toyota";
-            car.model = "Camry";
-            car.year = 2020;
 
-            db.carDao().insert(car);
+        mSwipeRefreshLayout = findViewById(R.id.swipeRefresh);//새로고침
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+
+        repository = new CarRepository(getApplicationContext());
+
+        Glide.with(this).load("https://storage.googleapis.com/tagjs-prod.appspot.com/v1/rMe8LyGkUp/32lpx4w4_expires_30_days.png").into((ImageView) findViewById(R.id.r3n68zdxrvxy));
+        Glide.with(this).load("https://storage.googleapis.com/tagjs-prod.appspot.com/v1/rMe8LyGkUp/3kad3u5l_expires_30_days.png").into((ImageView) findViewById(R.id.r85ahlc9kz3x));
+        Glide.with(this).load("https://storage.googleapis.com/tagjs-prod.appspot.com/v1/rMe8LyGkUp/joudgoro_expires_30_days.png").into((ImageView) findViewById(R.id.rihdt4qatrzl));
+//        Glide.with(this).load("https://storage.googleapis.com/tagjs-prod.appspot.com/v1/rMe8LyGkUp/e7ftkvqv_expires_30_days.png").into((ImageView)findViewById(R.id.r6fmex12jlwf));
+
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        new Thread(() -> {
+            List<Car> cars = repository.getAllCars();
+
+            adapter = new CarAdapter(cars);
+            Log.d("CarListSize", "Size: " + cars.size());
+            recyclerView.setAdapter(adapter);
         }).start();
 
-        new Thread(() -> {
-            List<Car> cars = db.carDao().getAllCars();
-            for (Car c : cars) {
-                Log.d("Car", c.brand + " " + c.model + " (" + c.year + ")");
+        EditText editText1 = findViewById(R.id.rloa39mzwog7);
+        editText1.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // before Text Changed
             }
-        }).start();
 
-        TextView carText = findViewById(R.id.carText);
-
-        new Thread(() -> {
-            List<Car> cars = db.carDao().getAllCars();
-            StringBuilder builder = new StringBuilder();
-            for (Car c : cars) {
-                builder.append(c.brand)
-                        .append(" ")
-                        .append(c.model)
-                        .append(" (")
-                        .append(c.year)
-                        .append(")\n");
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                editTextValue1 = s.toString(); // on Text Changed
             }
-            // 깃 허브 확인용
 
-            runOnUiThread(() -> carText.setText(builder.toString()));
-        }).start();
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+            @Override
+            public void afterTextChanged(Editable s) {
+                // after Text Changed
+            }
         });
+
+        View button1 = findViewById(R.id.r8qtl5bcqe28);
+
+        Button buttonAdd = findViewById(R.id.dataAdd);
+
+        View.OnClickListener clickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("Pressed");
+            }
+        };
+
+        View.OnClickListener layout = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, addActivity.class);
+                startActivity(intent);
+            }
+        };
+
+        button1.setOnClickListener(clickListener);
+        buttonAdd.setOnClickListener(layout);
     }
+
+    @Override
+    public void onRefresh() {
+        mSwipeRefreshLayout.setRefreshing(true);
+
+        // 데이터를 갱신하고 UI 스레드에서 반영
+        new Handler().postDelayed(() -> {
+            new Thread(() -> {
+                // 데이터 가져오기
+                List<Car> cars = repository.getAllCars();
+
+                // UI 스레드에서 RecyclerView 갱신
+                runOnUiThread(() -> {
+                    // 데이터만 갱신하기 (새로 어댑터를 설정하는 대신 notifyDataSetChanged로 갱신)
+                    if (adapter == null) {
+                        adapter = new CarAdapter(cars);  // 처음 어댑터가 설정될 때
+                        recyclerView.setAdapter(adapter);
+                    } else {
+                        adapter.setCarList(cars);  // 데이터 갱신
+                        adapter.notifyDataSetChanged();
+                    }
+
+                    // 새로고침 완료
+                    mSwipeRefreshLayout.setRefreshing(false);
+                });
+            }).start();
+        }, 1000);  // 1초 뒤에 새로고침 동작 실행
+    }
+
+
 }
