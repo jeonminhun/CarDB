@@ -21,10 +21,11 @@ public class CarRepository {
         new Thread(() -> carDao.insert(car)).start();
     }
 
-    public List<Car> getAllCars() {
-        return carDao.getAllCars(); // 이건 suspend나 LiveData 등으로 감싸면 더 좋음
+    public List<Car> getCarsPaginated(int limit, int offset) {
+        return carDao.getCarsPaginated(limit, offset);
     }
-    public List<Car> SearchCars(String query) {
-        return carDao.SearchCars(query); // 이건 suspend나 LiveData 등으로 감싸면 더 좋음
+
+    public List<Car> searchCarsPaginated(String query, int limit, int offset) {
+        return carDao.searchCarsPaginated(query, limit, offset);
     }
 }

@@ -27,9 +27,14 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
 
     public void setCarList(List<Car> carList) {
         this.carList = carList;
+        notifyDataSetChanged();  // 데이터 변경 후 어댑터 갱신
+    }
+    public void clearCars() {
+        carList.clear();
+        notifyDataSetChanged();
     }
 
-    public static class CarViewHolder extends RecyclerView.ViewHolder {
+        public static class CarViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
         TextView editKind, Number, code, context, Day;
 
@@ -77,9 +82,18 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
 
     }
 
-    public CarAdapter(List<Car> cars) {
-        this.carList = cars;
+    public CarAdapter(List<Car> carList) {
+        this.carList = carList;
     }
+
+    public void addCarList(List<Car> newCars) {
+        carList.addAll(newCars);  // 새로운 데이터를 기존 리스트에 추가
+    }
+
+    public void addCars(List<Car> cars) {
+        this.carList.addAll(cars);  // 새로운 데이터를 기존 리스트에 추가
+    }
+
 
     @Override
     public CarViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

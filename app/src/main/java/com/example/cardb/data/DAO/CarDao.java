@@ -13,9 +13,9 @@ public interface CarDao {
     @Insert
     void insert(Car car);
 
-    @Query("SELECT * FROM Car")
-    List<Car> getAllCars();
+    @Query("SELECT * FROM Car LIMIT :limit OFFSET :offset")
+    List<Car> getCarsPaginated(int limit, int offset);
 
-    @Query("SELECT * FROM Car WHERE carNumber LIKE '%' || :query || '%'")
-    List<Car> SearchCars(String query);
+    @Query("SELECT * FROM Car WHERE carNumber LIKE '%' || :query || '%' LIMIT :limit OFFSET :offset")
+    List<Car> searchCarsPaginated(String query, int limit, int offset);
 }

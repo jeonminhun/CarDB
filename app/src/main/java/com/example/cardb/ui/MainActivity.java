@@ -23,6 +23,7 @@ import com.example.cardb.data.adapter.CarAdapter;
 import com.example.cardb.data.entity.Car;
 import com.example.cardb.data.repository.CarRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
@@ -33,12 +34,15 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     private EditText editText1;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
+    private int limit = 20;  // 한 번에 불러올 데이터의 개수
+    private int offset = 0;  // 불러올 시작 위치
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mSwipeRefreshLayout = findViewById(R.id.swipeRefresh);//새로고침
+        mSwipeRefreshLayout = findViewById(R.id.swipeRefresh);
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
         repository = new CarRepository(getApplicationContext());
@@ -46,14 +50,29 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        new Thread(() -> {
-            List<Car> cars = repository.getAllCars();
 
-            adapter = new CarAdapter(cars);
-            Log.d("CarListSize", "Size: " + cars.size());
-            recyclerView.setAdapter(adapter);
-        }).start();
+//        // 버튼 클릭 시 임의로 데이터 추가
+//        Button buttonAddTestData = findViewById(R.id.buttonAddTestData);
+//        buttonAddTestData.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // 임의의 데이터를 생성
+//                Car car1 = new Car("123ABC", "Toyota", "Corolla", "testContext", "Black", new ArrayList<>());
+//                Car car2 = new Car("456DEF", "Honda", "Civic", "testContext", "Blue", new ArrayList<>());
+//                Car car3 = new Car("789GHI", "Ford", "Focus", "testContext", "Red", new ArrayList<>());
+//
+//                // 데이터를 데이터베이스에 삽입
+//                repository.insert(car1);
+//                repository.insert(car2);
+//                repository.insert(car3);
+//            }
+//        });
 
+
+        // 앱 시작 시 데이터 로딩
+        loadData(offset, limit);
+
+        // 검색 기능 구현
         editText1 = findViewById(R.id.SearchText);
 
         editText1.addTextChangedListener(new TextWatcher() {
@@ -69,8 +88,10 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
             @Override
             public void afterTextChanged(Editable s) {
+                // 검색어가 변경될 때마다 새로고침
+                offset = 0;  // 검색 시, 처음부터 다시 불러오기
                 new Thread(() -> {
-                    List<Car> cars = repository.SearchCars(String.valueOf(editText1.getText()));
+                    List<Car> cars = repository.searchCarsPaginated(String.valueOf(editText1.getText()), limit, offset);
                     runOnUiThread(() -> {
                         adapter = new CarAdapter(cars);
                         recyclerView.setAdapter(adapter);
@@ -79,41 +100,70 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             }
         });
 
+        // 데이터 추가 버튼 클릭
         Button buttonAdd = findViewById(R.id.dataAdd);
-
         buttonAdd.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, addActivity.class);
             startActivity(intent);
         });
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                // 스크롤이 마지막 아이템 근처에 오면 다음 페이지 데이터를 로드
+                if (!recyclerView.canScrollVertically(1)) {
+                    // 더 이상 스크롤할 공간이 없다면 (마지막 아이템에 도달)
+                    offset += limit; // 다음 페이지의 시작 위치
+                    loadData(offset, limit); // 데이터를 불러오기
+                }
+            }
+        });
+
+
     }
+
+    private void loadData(int offset, int limit) {
+        new Thread(() -> {
+            // 데이터베이스에서 페이지네이션 방식으로 데이터 로드
+            List<Car> cars = repository.getCarsPaginated(limit, offset);
+
+            // UI 스레드에서 RecyclerView 갱신
+            runOnUiThread(() -> {
+                if (adapter == null) {
+                    // 처음 데이터가 로드될 때 어댑터를 설정
+                    adapter = new CarAdapter(cars);
+                    recyclerView.setAdapter(adapter);
+                } else {
+                    // 이미 데이터가 있다면, 데이터를 추가로 갱신
+                    adapter.addCars(cars);  // 새로운 데이터를 추가
+                    adapter.notifyDataSetChanged();  // 어댑터 갱신
+                }
+            });
+        }).start();
+    }
+
 
     @Override
     public void onRefresh() {
         mSwipeRefreshLayout.setRefreshing(true);
 
-        // 데이터를 갱신하고 UI 스레드에서 반영
+        // 새로고침 시 offset을 0으로 초기화하고 데이터를 처음부터 로드
+        offset = 0;
+
+        // 기존 데이터를 비우고 새 데이터를 로드
         new Handler().postDelayed(() -> {
-            new Thread(() -> {
-                // 데이터 가져오기
-                List<Car> cars = repository.getAllCars();
+            // 기존 데이터를 초기화
+            if (adapter != null) {
+                adapter.clearCars();  // 이 메서드는 adapter에서 데이터를 삭제하는 메서드로 정의해야 합니다.
+            }
 
-                // UI 스레드에서 RecyclerView 갱신
-                runOnUiThread(() -> {
-                    // 데이터만 갱신하기 (새로 어댑터를 설정하는 대신 notifyDataSetChanged로 갱신)
-                    if (adapter == null) {
-                        adapter = new CarAdapter(cars);  // 처음 어댑터가 설정될 때
-                        recyclerView.setAdapter(adapter);
-                    } else {
-                        adapter.setCarList(cars);  // 데이터 갱신
-                        adapter.notifyDataSetChanged();
-                    }
-
-                    // 새로고침 완료
-                    mSwipeRefreshLayout.setRefreshing(false);
-                });
-            }).start();
+            // 새로 데이터를 로드
+            loadData(offset, limit);
+            mSwipeRefreshLayout.setRefreshing(false);
         }, 1000);  // 1초 뒤에 새로고침 동작 실행
     }
-
-
 }
+
+

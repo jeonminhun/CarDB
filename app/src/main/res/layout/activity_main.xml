@@ -48,6 +48,14 @@
                         android:text="자동차 목록" />
                 </LinearLayout>
 
+             <!--   <Button
+                    android:id="@+id/buttonAddTestData"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="임의 데이터 추가"
+                    android:layout_marginTop="20dp"
+                    android:layout_gravity="center" />-->
+
                 <Button
                     android:id="@+id/dataAdd"
                     android:layout_width="wrap_content"
