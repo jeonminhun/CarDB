@@ -7,50 +7,58 @@
     android:layout_width="match_parent"
     android:importantForAccessibility="no"
     android:layout_height="match_parent">
+
     <ScrollView
         android:id="@+id/rapsgq38n119"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:background="#FEFEFE">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
+            <!-- 제목 및 데이터 추가 버튼 -->
             <LinearLayout
                 android:id="@+id/asdfasdf"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-            <LinearLayout
-                android:id="@+id/raspmp6rkwib"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="130dp"
-                android:orientation="vertical">
-                <TextView
-                    android:id="@+id/ryqbzksdqx6c"
-                    android:textColor="#1D1E20"
-                    android:textSize="28sp"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="5dp"
-                    android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp">
+
+                <LinearLayout
+                    android:id="@+id/raspmp6rkwib"
                     android:layout_width="wrap_content"
-                    android:text="자동차 목록"
-                    />
-            </LinearLayout>
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="16dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/ryqbzksdqx6c"
+                        android:textColor="#1D1E20"
+                        android:textSize="28sp"
+                        android:textStyle="bold"
+                        android:layout_marginEnd="90dp"
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="자동차 목록" />
+                </LinearLayout>
 
                 <Button
                     android:id="@+id/dataAdd"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColorHint="@color/white"
-                    android:hint="데이터 추가">
-                </Button>
+                    android:text="데이터 추가"
+                    android:textColor="#FFFFFF"
+                    android:backgroundTint="@color/primary"
+                    android:layout_gravity="center_vertical" />
+            </LinearLayout>
 
-        </LinearLayout>
+            <!-- 검색 입력란 -->
             <LinearLayout
                 android:id="@+id/rinjk21autkf"
                 android:layout_width="match_parent"
@@ -58,14 +66,16 @@
                 android:layout_marginBottom="20dp"
                 android:layout_marginHorizontal="20dp"
                 android:orientation="horizontal">
+
                 <LinearLayout
                     android:id="@+id/regyxr3zdu6j"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:background="@drawable/cr10bf5f6fa"
-                    android:orientation="horizontal">
+                    android:background="@drawable/card_background"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
 
                     <EditText
                         android:id="@+id/SearchText"
@@ -81,6 +91,8 @@
                         android:textSize="15sp" />
                 </LinearLayout>
             </LinearLayout>
+
+            <!-- RecyclerView 및 SwipeRefreshLayout -->
             <LinearLayout
                 android:id="@+id/r0sfyffr13plo"
                 android:layout_width="match_parent"
@@ -88,12 +100,13 @@
                 android:layout_marginBottom="15dp"
                 android:layout_marginHorizontal="20dp"
                 android:orientation="horizontal">
+
                 <View
                     android:layout_width="0dp"
                     android:layout_height="670dp"
                     android:layout_weight="1"/>
+
                 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                    xmlns:android="http://schemas.android.com/apk/res/android"
                     android:id="@+id/swipeRefresh"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
@@ -103,7 +116,7 @@
                         android:id="@+id/recyclerView"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:contentDescription="자동차 목록입니다"/>
+                        android:contentDescription="자동차 목록입니다" />
                 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
             </LinearLayout>
         </LinearLayout>

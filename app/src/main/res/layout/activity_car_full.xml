@@ -2,6 +2,11 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fillViewport="true"
+    android:focusableInTouchMode="true"
+    android:fitsSystemWindows="true"
+    android:descendantFocusability="afterDescendants"
     android:padding="16dp">
 
     <LinearLayout
@@ -11,12 +16,21 @@
         android:orientation="vertical">
 
         <!-- 대표 이미지 -->
-        <ImageView
-            android:id="@+id/detailMainImage"
+
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:scaleType="centerCrop"
-            android:contentDescription="대표 이미지" />
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp">
+            <ImageView
+                android:id="@+id/detailMainImage"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:scaleType="centerCrop"
+                android:contentDescription="대표 이미지" />
+
+        </com.google.android.material.card.MaterialCardView>
 
         <!-- 썸네일 수평 스크롤 -->
         <HorizontalScrollView
@@ -35,51 +49,135 @@
                 android:padding="4dp" />
         </HorizontalScrollView>
 
-        <!-- 차종 -->
-        <TextView
+        <!-- 공통 스타일의 입력 필드 -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.Material3.TextInputLayout.FilledBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusBottomEnd="12dp">
+
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/detailCarKind"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:clickable="false"
+                android:focusable="false"
+                android:text="차종"
+                android:inputType="none" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.Material3.TextInputLayout.FilledBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp">
+
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/detailCarNumber"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:clickable="false"
+                android:focusable="false"
+                android:text="차번호"
+                android:inputType="none" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.Material3.TextInputLayout.FilledBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp">
+
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/detailDay"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:focusable="false"
+                android:clickable="false"
+                android:text="날짜"
+                android:inputType="none" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.Material3.TextInputLayout.FilledBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp">
+
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/detailCode"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:focusable="false"
+                android:clickable="false"
+                android:text="도장 코드"
+                android:inputType="none" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.Material3.TextInputLayout.FilledBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp">
+
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/detailContext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="50dp"
+                android:focusable="false"
+                android:clickable="false"
+                android:inputType="none"
+                android:text="특이사항"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <!--<TextView
             android:id="@+id/detailCarKind"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="22sp"
             android:text="차종"
             android:textStyle="bold"
-            android:layout_marginTop="16dp" />
+            android:layout_marginTop="16dp" />-->
 
         <!-- 차번호 -->
-        <TextView
+        <!--<TextView
             android:id="@+id/detailCarNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="차번호"
             android:textSize="20sp"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="8dp" />-->
 
         <!-- 날짜 -->
-        <TextView
+       <!-- <TextView
             android:id="@+id/detailDay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="날짜"
             android:textSize="20sp"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="8dp" />-->
 
         <!-- 도장 코드 -->
-        <TextView
+        <!--<TextView
             android:id="@+id/detailCode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="도장 코드"
             android:textSize="20sp"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="8dp" />-->
 
         <!-- 특이사항 -->
-        <TextView
+       <!-- <TextView
             android:id="@+id/detailContext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="특이사항"
             android:textSize="20sp"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="8dp" />-->
 
     </LinearLayout>
 </ScrollView>

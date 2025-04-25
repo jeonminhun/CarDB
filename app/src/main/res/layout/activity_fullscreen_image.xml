@@ -5,6 +5,7 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+    <!-- 첫 번째 이미지 미리보기 그룹 -->
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -15,24 +16,24 @@
         <ImageView
             android:id="@+id/previewImage1"
             android:layout_width="185dp"
-            android:layout_height="120dp"
+            android:layout_height="140dp"
+            android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
-
-            android:background="#dddddd"
+            android:background="@drawable/image_border"
             android:contentDescription="미리보기 이미지"
             android:scaleType="centerCrop" />
 
         <ImageView
             android:id="@+id/previewImage2"
             android:layout_width="185dp"
-            android:layout_height="120dp"
+            android:layout_height="140dp"
             android:layout_marginRight="10dp"
-
-            android:background="#dddddd"
+            android:background="@drawable/image_border"
             android:contentDescription="미리보기 이미지"
             android:scaleType="centerCrop" />
     </LinearLayout>
 
+    <!-- 두 번째 이미지 미리보기 그룹 -->
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -43,25 +44,24 @@
         <ImageView
             android:id="@+id/previewImage3"
             android:layout_width="185dp"
-            android:layout_height="120dp"
+            android:layout_height="140dp"
+            android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
-
-            android:background="#dddddd"
+            android:background="@drawable/image_border"
             android:contentDescription="미리보기 이미지"
             android:scaleType="centerCrop" />
 
         <ImageView
             android:id="@+id/previewImage4"
             android:layout_width="185dp"
-            android:layout_height="120dp"
+            android:layout_height="140dp"
             android:layout_marginRight="10dp"
-
-            android:background="#dddddd"
+            android:background="@drawable/image_border"
             android:contentDescription="미리보기 이미지"
             android:scaleType="centerCrop" />
     </LinearLayout>
 
-
+    <!-- 세 번째 이미지 미리보기 그룹 -->
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -72,24 +72,24 @@
         <ImageView
             android:id="@+id/previewImage5"
             android:layout_width="185dp"
-            android:layout_height="120dp"
+            android:layout_height="140dp"
+            android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
-
-            android:background="#dddddd"
+            android:background="@drawable/image_border"
             android:contentDescription="미리보기 이미지"
             android:scaleType="centerCrop" />
 
         <ImageView
             android:id="@+id/previewImage6"
             android:layout_width="185dp"
-            android:layout_height="120dp"
+            android:layout_height="140dp"
             android:layout_marginRight="10dp"
-
-            android:background="#dddddd"
+            android:background="@drawable/image_border"
             android:contentDescription="미리보기 이미지"
             android:scaleType="centerCrop" />
     </LinearLayout>
 
+    <!-- 네 번째 이미지 미리보기 그룹 -->
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -100,24 +100,24 @@
         <ImageView
             android:id="@+id/previewImage7"
             android:layout_width="185dp"
-            android:layout_height="120dp"
+            android:layout_height="140dp"
+            android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
-
-            android:background="#dddddd"
+            android:background="@drawable/image_border"
             android:contentDescription="미리보기 이미지"
             android:scaleType="centerCrop" />
 
         <ImageView
             android:id="@+id/previewImage8"
             android:layout_width="185dp"
-            android:layout_height="120dp"
+            android:layout_height="140dp"
             android:layout_marginRight="10dp"
-
-            android:background="#dddddd"
+            android:background="@drawable/image_border"
             android:contentDescription="미리보기 이미지"
             android:scaleType="centerCrop" />
     </LinearLayout>
 
+    <!-- 다섯 번째 이미지 미리보기 그룹 -->
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -128,20 +128,19 @@
         <ImageView
             android:id="@+id/previewImage9"
             android:layout_width="185dp"
-            android:layout_height="120dp"
+            android:layout_height="140dp"
+            android:layout_marginEnd="10dp"
             android:layout_marginRight="10dp"
-
-            android:background="#dddddd"
+            android:background="@drawable/image_border"
             android:contentDescription="미리보기 이미지"
             android:scaleType="centerCrop" />
 
         <ImageView
             android:id="@+id/previewImage10"
             android:layout_width="185dp"
-            android:layout_height="120dp"
+            android:layout_height="140dp"
             android:layout_marginRight="10dp"
-
-            android:background="#dddddd"
+            android:background="@drawable/image_border"
             android:contentDescription="미리보기 이미지"
             android:scaleType="centerCrop" />
     </LinearLayout>
