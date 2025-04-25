@@ -11,7 +11,7 @@ import androidx.room.RoomDatabase;
 import com.example.cardb.data.DAO.CarDao;
 import com.example.cardb.data.entity.Car;
 
-@Database(entities = {Car.class}, version = 4)
+@Database(entities = {Car.class}, version = 5)
 @TypeConverters(Converter.class)
 public abstract class CarDatabase extends RoomDatabase {
     private static CarDatabase INSTANCE;

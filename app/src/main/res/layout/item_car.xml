@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ListItem"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:clickable="true"
     android:orientation="horizontal"
     android:padding="8dp">
 
@@ -35,6 +37,11 @@
             android:layout_height="wrap_content"
             android:hint="날짜" />
 
+        <TextView
+            android:id="@+id/code"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="도장 코드" />
         <TextView
             android:id="@+id/context"
             android:layout_width="match_parent"

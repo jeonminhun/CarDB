@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -29,9 +30,8 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     private RecyclerView recyclerView;
     private CarAdapter adapter;
     private CarRepository repository;
+    private EditText editText1;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-
-    private String editTextValue1 = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,11 +42,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
         repository = new CarRepository(getApplicationContext());
-
-        Glide.with(this).load("https://storage.googleapis.com/tagjs-prod.appspot.com/v1/rMe8LyGkUp/32lpx4w4_expires_30_days.png").into((ImageView) findViewById(R.id.r3n68zdxrvxy));
-        Glide.with(this).load("https://storage.googleapis.com/tagjs-prod.appspot.com/v1/rMe8LyGkUp/3kad3u5l_expires_30_days.png").into((ImageView) findViewById(R.id.r85ahlc9kz3x));
-        Glide.with(this).load("https://storage.googleapis.com/tagjs-prod.appspot.com/v1/rMe8LyGkUp/joudgoro_expires_30_days.png").into((ImageView) findViewById(R.id.rihdt4qatrzl));
-//        Glide.with(this).load("https://storage.googleapis.com/tagjs-prod.appspot.com/v1/rMe8LyGkUp/e7ftkvqv_expires_30_days.png").into((ImageView)findViewById(R.id.r6fmex12jlwf));
 
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -59,7 +54,8 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             recyclerView.setAdapter(adapter);
         }).start();
 
-        EditText editText1 = findViewById(R.id.rloa39mzwog7);
+        editText1 = findViewById(R.id.SearchText);
+
         editText1.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -68,36 +64,27 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                editTextValue1 = s.toString(); // on Text Changed
+                // on Text Changed
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                // after Text Changed
+                new Thread(() -> {
+                    List<Car> cars = repository.SearchCars(String.valueOf(editText1.getText()));
+                    runOnUiThread(() -> {
+                        adapter = new CarAdapter(cars);
+                        recyclerView.setAdapter(adapter);
+                    });
+                }).start();
             }
         });
 
-        View button1 = findViewById(R.id.r8qtl5bcqe28);
-
         Button buttonAdd = findViewById(R.id.dataAdd);
 
-        View.OnClickListener clickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                System.out.println("Pressed");
-            }
-        };
-
-        View.OnClickListener layout = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, addActivity.class);
-                startActivity(intent);
-            }
-        };
-
-        button1.setOnClickListener(clickListener);
-        buttonAdd.setOnClickListener(layout);
+        buttonAdd.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, addActivity.class);
+            startActivity(intent);
+        });
     }
 
     @Override

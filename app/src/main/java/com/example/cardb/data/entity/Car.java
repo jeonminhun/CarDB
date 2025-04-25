@@ -4,11 +4,12 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 @Entity
-public class Car {
+public class Car implements Serializable {
     @PrimaryKey(autoGenerate = true)
     public int id;
 
@@ -18,6 +19,8 @@ public class Car {
     @ColumnInfo(name = "carNumber")
     public String carNumber;
 
+    @ColumnInfo(name = "code")
+    public String code;
 
     @ColumnInfo(name = "context")
     public String context;
@@ -28,6 +31,9 @@ public class Car {
     @ColumnInfo(name = "imagePath")
     public List<String> imagePath;
 
+    public String getCode() {
+        return code;
+    }
     public String getCarKind() {
         return carKind;
     }
@@ -48,9 +54,10 @@ public class Car {
         return context;
     }
 
-    public Car(String carKind, String carNumber, String context, String day, List<String> imagePath) {
+    public Car(String carKind, String carNumber, String code, String context, String day, List<String> imagePath) {
         this.carKind = carKind;
         this.carNumber = carNumber;
+        this.code = code;
         this.context = context;
         this.day = day;
         this.imagePath = imagePath;

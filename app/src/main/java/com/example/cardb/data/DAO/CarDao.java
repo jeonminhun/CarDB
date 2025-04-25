@@ -15,4 +15,7 @@ public interface CarDao {
 
     @Query("SELECT * FROM Car")
     List<Car> getAllCars();
+
+    @Query("SELECT * FROM Car WHERE carNumber LIKE '%' || :query || '%'")
+    List<Car> SearchCars(String query);
 }

@@ -1,5 +1,8 @@
 package com.example.cardb.data.adapter;
 
+import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.cardb.R;
 import com.example.cardb.data.entity.Car;
+import com.example.cardb.ui.CarFull;
+import com.example.cardb.ui.FullscreenImageActivity;
+import com.example.cardb.ui.MainActivity;
 
 import java.io.File;
 import java.util.List;
@@ -25,12 +31,16 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
 
     public static class CarViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
-        TextView editKind, Number,context, Day;
+        TextView editKind, Number, code, context, Day;
+
+        View ListItem;
         public CarViewHolder(View itemView) {
             super(itemView);
+            ListItem = itemView.findViewById(R.id.ListItem);
             imageView = itemView.findViewById(R.id.imageView);
             editKind = itemView.findViewById(R.id.editKind);
             Number = itemView.findViewById(R.id.Number);
+            code = itemView.findViewById(R.id.code);
             context = itemView.findViewById(R.id.context);
             Day = itemView.findViewById(R.id.Day);
         }
@@ -41,6 +51,7 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
         Car car = carList.get(position);
         holder.editKind.setText(String.format("차종 : %s", car.getCarKind()));
         holder.Number.setText(String.format("차번 : %s", car.getCarNumber()));
+        holder.code.setText(String.format("도장 코드 : %s", car.getCode()));
         holder.context.setText(String.format("특이사항 : %s", car.getContext()));
         holder.Day.setText(String.format("날짜 : %s", car.getDay()));
 
@@ -55,6 +66,15 @@ public class CarAdapter extends RecyclerView.Adapter<CarAdapter.CarViewHolder> {
         } else {
             holder.imageView.setImageResource(R.drawable.placeholder); // 기본 이미지
         }
+
+        holder.ListItem.setOnClickListener(v->{
+            Context context = holder.itemView.getContext();
+            Intent intent = new Intent(context, CarFull.class);
+            intent.putExtra("car", car);
+            v.getContext().startActivity(intent);
+                }
+        );
+
     }
 
     public CarAdapter(List<Car> cars) {

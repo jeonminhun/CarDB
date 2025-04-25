@@ -24,4 +24,7 @@ public class CarRepository {
     public List<Car> getAllCars() {
         return carDao.getAllCars(); // 이건 suspend나 LiveData 등으로 감싸면 더 좋음
     }
+    public List<Car> SearchCars(String query) {
+        return carDao.SearchCars(query); // 이건 suspend나 LiveData 등으로 감싸면 더 좋음
+    }
 }
