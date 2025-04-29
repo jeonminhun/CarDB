@@ -121,15 +121,16 @@ public class addActivity extends AppCompatActivity {
             String number = NumberInput.getText().toString();
 
             if (isAnyFieldEmpty(kind, day, context, number)) {
-                Toast.makeText(addActivity.this, "모든 정보를 입력해주세요.", Toast.LENGTH_SHORT).show();
-                return;
+                Toast.makeText(addActivity.this, "일부 데이터가 비어있습니다.", Toast.LENGTH_SHORT).show();
+                // 사용자 요청으로 인한 기능 약화
             }
 
             // 비동기 작업 시작
-            new SaveCarTask().execute(kind, day, code, context, number);
+            saveCarData(kind, day, code, context, number);
         });
     }
 
+    // 이미지 선택 메소드
     @NonNull
     private ActivityResultLauncher<PickVisualMediaRequest> getPickVisualMediaRequestActivityResultLauncher() {
         ActivityResultLauncher<PickVisualMediaRequest> pickMultipleMedia = registerForActivityResult(
@@ -151,6 +152,7 @@ public class addActivity extends AppCompatActivity {
         return pickMultipleMedia;
     }
 
+    // 뷰 바인딩
     private void ViewBinding() {
         editKindInput = findViewById(R.id.editKind);
         NumberInput = findViewById(R.id.Number);
@@ -173,32 +175,36 @@ public class addActivity extends AppCompatActivity {
     }
 
     // 비동기 작업 처리 (AsyncTask)
-    private class SaveCarTask extends AsyncTask<String, Void, Void> {
-        @Override
-        protected Void doInBackground(String... params) {
-            String kind = params[0];
-            String day = params[1];
-            String code = params[2];
-            String context = params[3];
-            String number = params[4];
+    private void saveCarData(String kind, String day, String code, String context, String number) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Handler mainHandler = new Handler(Looper.getMainLooper());
 
-            // 이미지 저장 (백그라운드에서 처리)
-            saveImages(imageUris);
-            // 자동차 객체 생성 및 DB 저장 (백그라운드에서 처리)
-            Car car = new Car(kind, number, code, context, day, Images);
-            repository.insert(car);
+        executor.execute(() -> {
+            try {
+                // 1. 이미지 저장 (백그라운드)
+                saveImages(imageUris);
 
-            return null;
-        }
+                // 2. Car 객체 생성 후 DB 저장
+                Car car = new Car(kind, number, code, context, day, Images);
+                repository.insert(car);
 
-        @Override
-        protected void onPostExecute(Void result) {
-            // UI 스레드에서 실행
-            Toast.makeText(addActivity.this, "자동차 정보가 저장되었습니다.", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(addActivity.this, MainActivity.class));
-            finish(); // 리스트 화면으로 돌아가기
-        }
+                // 3. UI 스레드로 결과 알림
+                mainHandler.post(() -> {
+                    Toast.makeText(addActivity.this, "자동차 정보가 저장되었습니다.", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(addActivity.this, MainActivity.class));
+                    finish();
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+                mainHandler.post(() -> {
+                    Toast.makeText(addActivity.this, "자동차 저장 중 오류 발생", Toast.LENGTH_SHORT).show();
+                });
+            }
+        });
+
+        executor.shutdown();
     }
+
 
 
     // 이미지 저장 메소드
@@ -230,6 +236,7 @@ public class addActivity extends AppCompatActivity {
         }
     }
 
+    // 사진 촬영 및 저장
     private final ActivityResultLauncher<Uri> takePictureLauncher =
             registerForActivityResult(new ActivityResultContracts.TakePicture(), result -> {
                 if (result && cameraImageUri != null) {
@@ -238,16 +245,21 @@ public class addActivity extends AppCompatActivity {
 
                     // 내부 저장소에 저장
                     try {
-                        Bitmap bitmap;
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                             ImageDecoder.Source source = ImageDecoder.createSource(getContentResolver(), cameraImageUri);
-                            bitmap = ImageDecoder.decodeBitmap(source);
+                            ImageDecoder.decodeBitmap(source);
                         } else {
-                            bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), cameraImageUri);
+                             MediaStore.Images.Media.getBitmap(getContentResolver(), cameraImageUri);
                         }
 
-                        String imagePath = FileUtil.saveImageToInternalStorage(bitmap, this);
-                        Images.add(imagePath);
+                        // ✅ 사진 저장 완료 후 바로 또 촬영
+                        if (imageUris.size() < 10) { // 최대 10장까지만
+                            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                                launchCamera(); // 다음 촬영 시작
+                            }, 500); // 약간의 딜레이 주면 더 자연스러움
+                        } else {
+                            Toast.makeText(this, "최대 10장까지만 저장할 수 있습니다.", Toast.LENGTH_SHORT).show();
+                        }
 
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -257,6 +269,7 @@ public class addActivity extends AppCompatActivity {
             });
 
 
+    // 카메라 권한 체크 및 실행
     private void takePhoto() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -266,12 +279,14 @@ public class addActivity extends AppCompatActivity {
         }
     }
 
+    // 카메라 실행
     private void launchCamera() {
         File imageFile = new File(getExternalCacheDir(), "photo_" + System.currentTimeMillis() + ".jpg");
         cameraImageUri = FileProvider.getUriForFile(this, getPackageName() + ".fileprovider", imageFile);
         takePictureLauncher.launch(cameraImageUri);
     }
 
+    // 카메라 권한 획득 확인 및 실행
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);

@@ -3,4 +3,5 @@
     <color name="primary">#FF6200EE</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="md_theme_light_error">#B3261E</color>
 </resources>

@@ -3,14 +3,17 @@ package com.example.cardb.data.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.cardb.R;
 import com.example.cardb.ui.FullscreenImageActivity;
 
 import java.util.ArrayList;
@@ -29,25 +32,26 @@ public class ImagePagerAdapter extends RecyclerView.Adapter<ImagePagerAdapter.Vi
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ImageView imageView = new ImageView(context);
-        imageView.setLayoutParams(new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT));
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        return new ViewHolder(imageView);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_image, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Uri uri = imageUris.get(position);
-        Glide.with(context).load(uri).into((ImageView) holder.itemView);
+        Glide.with(context).load(uri).into(holder.imageView);
 
-        // ✅ 여기서 클릭 이벤트 처리
-        holder.itemView.setOnClickListener(v -> {
+        holder.imageView.setOnClickListener(v -> {
             Intent intent = new Intent(context, FullscreenImageActivity.class);
             intent.putParcelableArrayListExtra("imageUris", new ArrayList<>(imageUris));
-            intent.putExtra("position", position); // 선택한 이미지 위치 전달
+            intent.putExtra("position", position);
             context.startActivity(intent);
+        });
+
+        holder.btnDelete.setOnClickListener(v -> {
+            imageUris.remove(position);
+            notifyItemRemoved(position);
+            notifyItemRangeChanged(position, imageUris.size());
         });
     }
 
@@ -57,8 +61,13 @@ public class ImagePagerAdapter extends RecyclerView.Adapter<ImagePagerAdapter.Vi
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        ImageView imageView;
+        ImageButton btnDelete;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            imageView = itemView.findViewById(R.id.imageView);
+            btnDelete = itemView.findViewById(R.id.btnDeleteImage);
         }
     }
 }

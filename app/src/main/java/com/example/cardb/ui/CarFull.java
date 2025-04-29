@@ -5,10 +5,14 @@ import android.os.Bundle;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,16 +20,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.example.cardb.R;
 import com.example.cardb.data.entity.Car;
+import com.example.cardb.data.repository.CarRepository;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class CarFull extends AppCompatActivity {
 
     private ImageView mainImageView;
     private LinearLayout thumbnailContainer;
     private List<String> imageUris;
+    private CarRepository repository;
+
 
 
     @Override
@@ -34,6 +43,7 @@ public class CarFull extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_car_full);
 
+        repository = new CarRepository(getApplicationContext());
 
 
         mainImageView = findViewById(R.id.detailMainImage);
@@ -44,6 +54,8 @@ public class CarFull extends AppCompatActivity {
         TextView carDay = findViewById(R.id.detailDay);
         TextView carCode = findViewById(R.id.detailCode);
         TextView carContext = findViewById(R.id.detailContext);
+        Button delete = findViewById(R.id.btnDeleteCar);
+        Button edit = findViewById(R.id.btnEditCar);
 
         // 데이터 받기
 
@@ -100,6 +112,31 @@ public class CarFull extends AppCompatActivity {
             });
         }
 
+        // 삭제 버튼 클릭 이벤트
+        delete.setOnClickListener(v->{
+            deleteCar(car);
+            startActivity(new Intent(this, MainActivity.class));
+        });
 
+        edit.setOnClickListener(v -> {
+            Intent intent = new Intent(this, EditCarActivity.class);
+            intent.putExtra("car", car);  // Car 객체 넘기기 (Serializable 필요)
+            startActivity(intent);
+        });
+
+
+    }
+
+    private void deleteCar(Car car) {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Handler mainHandler = new Handler(Looper.getMainLooper());
+        executor.execute(()->{
+            repository.deleteCar(car.getId());
+            mainHandler.post(() -> {
+                Toast.makeText(this, "삭제 완료!", Toast.LENGTH_SHORT).show();
+                finish();
+            });
+        });
+        executor.shutdown();
     }
 }

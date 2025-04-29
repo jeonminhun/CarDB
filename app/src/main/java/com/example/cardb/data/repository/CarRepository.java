@@ -1,5 +1,6 @@
 package com.example.cardb.data.repository;
 import android.content.Context;
+import android.util.Log;
 
 
 import com.example.cardb.data.DAO.CarDao;
@@ -27,5 +28,17 @@ public class CarRepository {
 
     public List<Car> searchCarsPaginated(String query, int limit, int offset) {
         return carDao.searchCarsPaginated(query, limit, offset);
+    }
+
+    public void updateCar(Car car) {
+        new Thread(() -> {
+            int updated = carDao.updateCar(car);
+            Log.d("CarRepository", "업데이트된 행 수: " + updated);
+        }).start();
+
+    }
+
+    public void deleteCar(int carId) {
+        carDao.deleteCar(carId);
     }
 }
