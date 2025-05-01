@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
@@ -113,10 +114,21 @@ public class CarFull extends AppCompatActivity {
         }
 
         // 삭제 버튼 클릭 이벤트
-        delete.setOnClickListener(v->{
-            deleteCar(car);
-            startActivity(new Intent(this, MainActivity.class));
+        delete.setOnClickListener(v -> {
+            new AlertDialog.Builder(this)
+                    .setTitle("삭제 확인")
+                    .setMessage("정말로 이 차량을 삭제하시겠습니까?")
+                    .setPositiveButton("예", (dialog, which) -> {
+                        deleteCar(car);
+                        startActivity(new Intent(this, MainActivity.class));
+                        finish(); // 현재 액티비티 종료 (선택사항)
+                    })
+                    .setNegativeButton("아니오", (dialog, which) -> {
+                        dialog.dismiss();
+                    })
+                    .show();
         });
+
 
         edit.setOnClickListener(v -> {
             Intent intent = new Intent(this, EditCarActivity.class);
